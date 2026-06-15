@@ -5,28 +5,38 @@ export default class Tree {
     this.reduction = reduction;
     this.x = x;
     this.y = y;
-    this.fruitProb = 20;
+    this.fruitProb = 30;
     this.seed = seed;
     this.hue = Math.floor(Math.random() * 360);
+    this.random = Math.floor(Math.random() * 101);
+    this.phase = Math.random() * Math.PI * 2;
+    this.sway = 0;
+  }
+
+  update(time) {
+    this.sway = Math.sin(time * 0.01 + this.phase) * 12;
+    if (this.len < 150) {
+      this.len = this.len + 0.1;
+    }
   }
 
   fruit(ctx) {
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "pink";
     ctx.beginPath();
-    ctx.arc(0.5 * 10, 0, 10, 0, 2 * Math.PI);
+    ctx.arc(0.5 * 10 + this.sway * 0.2, 0, 3, 0, 2 * Math.PI);
     ctx.fill();
   }
 
   leaf(ctx) {
     ctx.beginPath();
-    ctx.ellipse(0, 0, 10, 15, 0, 0, Math.PI * 2);
+    ctx.ellipse(0 + this.sway * 0.2, 0, 5, 12, 0, 0, Math.PI * 2);
     ctx.fillStyle = "green";
     ctx.fill();
 
     // vein
     ctx.beginPath();
-    ctx.moveTo(0, -15);
-    ctx.lineTo(0, 15);
+    ctx.moveTo(0, -12);
+    ctx.lineTo(0 + this.sway * 0.2, 12);
     ctx.strokeStyle = "#224400";
     ctx.lineWidth = 2;
     ctx.stroke();
@@ -34,7 +44,7 @@ export default class Tree {
 
   branches(l, ctx, depth) {
     if (l < 10 || depth > 8) {
-      if (Math.floor(Math.random() * 101) < this.fruitProb) {
+      if (this.random < this.fruitProb) {
         this.fruit(ctx);
       } else {
         this.leaf(ctx);
@@ -43,8 +53,8 @@ export default class Tree {
       return;
     }
 
-    const saturation = 30 + depth * 3;
-    ctx.strokeStyle = `hsl(${this.hue}, 80%, ${saturation}%)`;
+    const saturation = 30 + depth * 5;
+    ctx.strokeStyle = `hsl(${this.hue}, 90%, ${saturation}%)`;
 
     // Right Tree
     const branchSeed = hash(this.seed, 10, depth, 1, 1);
@@ -55,7 +65,7 @@ export default class Tree {
     ctx.rotate(this.angle * angle);
     ctx.lineWidth = l * 0.2;
     ctx.moveTo(0, 0);
-    ctx.lineTo(0, -l);
+    ctx.lineTo(0 + this.sway * 0.2, -l);
     ctx.stroke();
     ctx.translate(0, -l);
     this.branches(l * this.reduction, ctx, depth + 1);
@@ -69,7 +79,7 @@ export default class Tree {
     ctx.rotate(-this.angle * angleL);
     ctx.lineWidth = l * 0.2;
     ctx.moveTo(0, 0);
-    ctx.lineTo(0, -l);
+    ctx.lineTo(0 + this.sway * 0.2, -l);
     ctx.stroke();
     ctx.translate(0, -l);
     this.branches(l * this.reduction, ctx, depth + 1);

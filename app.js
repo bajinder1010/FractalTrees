@@ -23,7 +23,7 @@ canvas.addEventListener("click", (e) => {
   ctx.translate(canvas.width / 2, canvas.height);
 
   tree = new Tree(
-    Math.floor(Math.random() * (150 - 40 + 1)) + 40,
+    0,
     0.6,
     0.8,
     x - canvas.width / 2,
@@ -33,13 +33,14 @@ canvas.addEventListener("click", (e) => {
 
   trees.push(tree);
 
-  drawAllTrees();
+  //drawAllTrees();
 });
 
-function drawAllTrees() {
+function drawAllTrees(time) {
   //ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   for (const tree of trees) {
+    tree.update(time);
     tree.display(ctx);
   }
 }
@@ -54,18 +55,18 @@ function drawAllTrees() {
 
 // const tree6 = new Tree(100, 0.6, 0.8, -400, 0);
 
-// function animate() {
-//   ctx.setTransform(1, 0, 0, 1, 0, 0);
-//   ctx.clearRect(0, 0, canvas.width, canvas.height);
+function animate(time) {
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-//   ctx.translate(canvas.width / 2, canvas.height);
+  ctx.translate(canvas.width / 2, canvas.height);
 
-//   drawAllTrees();
+  drawAllTrees(time);
 
-//   requestAnimationFrame(animate);
-// }
+  requestAnimationFrame(animate);
+}
 
-// animate();
+animate();
 
 // function animate() {
 //   ctx.clearRect(0, 0, canvas.width, canvas.height);

@@ -11,11 +11,12 @@ export default class Tree {
     this.random = Math.floor(Math.random() * 101);
     this.phase = Math.random() * Math.PI * 2;
     this.sway = 0;
+    this.limit = Math.floor(Math.random() * (200 - 40 + 1)) + 20;
   }
 
   update(time) {
-    this.sway = Math.sin(time * 0.01 + this.phase) * 12;
-    if (this.len < 150) {
+    this.sway = Math.sin(time * 0.01 + this.phase) * 10;
+    if (this.len < this.limit) {
       this.len = this.len + 0.1;
     }
   }
